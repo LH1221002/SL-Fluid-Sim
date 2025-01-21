@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1832577, g: 0.22694919, b: 0.2950355, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -459,7 +458,6 @@ MonoBehaviour:
   scale: 2
   debugParam: 50000
   autoDraw: 1
-  testParams: {x: 1, y: 3, z: 0.6}
   shaderBillboard: {fileID: 4800000, guid: 4a0c3a32a60599c4198fe00e79a88932, type: 3}
   copyCountToArgsCompute: {fileID: 7200000, guid: 315c9eb00260d8743b3ffa9803eadaf3, type: 3}
 --- !u!114 &1294730516

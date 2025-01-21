@@ -330,18 +330,68 @@ namespace Seb.Fluid.Simulation
 
 		void RunSimulationStep()
 		{
-			Dispatch(compute, positionBuffer.count, kernelIndex: externalForcesKernel);
+			ExternalForces();
 
-			Dispatch(compute, positionBuffer.count, kernelIndex: spatialHashKernel);
-			gpuSort.Run();
-			spatialOffsetsCalc.Run(false);
-			Dispatch(compute, positionBuffer.count, kernelIndex: reorderKernel);
-			Dispatch(compute, positionBuffer.count, kernelIndex: reorderCopybackKernel);
+			SpatialHash();
+			GpuSort();
+			SpatialOffsetCalc();
+			Reorder();
+			ReorderCopyback();
 
-			Dispatch(compute, positionBuffer.count, kernelIndex: densityKernel);
-			Dispatch(compute, positionBuffer.count, kernelIndex: pressureKernel);
-			if (viscosityStrength != 0) Dispatch(compute, positionBuffer.count, kernelIndex: viscosityKernel);
+			Density();
+			Pressure();
+			Viscosity();
+			UpdatePositions();
+		}
+
+		private void UpdatePositions()
+		{
 			Dispatch(compute, positionBuffer.count, kernelIndex: updatePositionsKernel);
+		}
+
+		private void Viscosity()
+		{
+			if (viscosityStrength != 0) Dispatch(compute, positionBuffer.count, kernelIndex: viscosityKernel);
+		}
+
+		private void Pressure()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: pressureKernel);
+		}
+
+		private void Density()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: densityKernel);
+		}
+
+		private void ReorderCopyback()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: reorderCopybackKernel);
+		}
+
+		private void Reorder()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: reorderKernel);
+		}
+
+		private void SpatialOffsetCalc()
+		{
+			spatialOffsetsCalc.Run(false);
+		}
+
+		private void GpuSort()
+		{
+			gpuSort.Run();
+		}
+
+		private void SpatialHash()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: spatialHashKernel);
+		}
+
+		private void ExternalForces()
+		{
+			Dispatch(compute, positionBuffer.count, kernelIndex: externalForcesKernel);
 		}
 
 		void UpdateSmoothingConstants()
